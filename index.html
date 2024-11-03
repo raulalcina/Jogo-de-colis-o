@@ -1,0 +1,118 @@
+<!--
+Programa: Jogo de Colisão
+Nome: Gabriel Santos Pires - Nº: 12 - Turma: 2L
+Nome: Miguel Reny - Nº: 19.
+Nome: Nicollas Augusto dos Santos Silva - Nº: 21.
+Nome: Raul Dias - Nº: 23.
+DESCRIÇÃO: Jogo simples com dois personagens que se movem em um canvas. Se houver colisão, o jogo é finalizado.
+-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Colisão</title>
+    <style>
+        /* Estilo para o canvas, adicionando uma borda */
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas onde o jogo será desenhado -->
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+    <!-- Botões para controlar os jogadores -->
+    <div>
+        <button onclick="movePlayer1('up')">Cima (W)</button>
+        <button onclick="movePlayer1('down')">Baixo (S)</button>
+        <button onclick="movePlayer1('left')">Esquerda (A)</button>
+        <button onclick="movePlayer1('right')">Direita (D)</button>
+        <button onclick="movePlayer2('up')">Cima (↑)</button>
+        <button onclick="movePlayer2('down')">Baixo (↓)</button>
+        <button onclick="movePlayer2('left')">Esquerda (←)</button>
+        <button onclick="movePlayer2('right')">Direita (→)</button>
+    </div>
+
+    <script>
+        // Obtém o contexto do canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Define as propriedades dos jogadores
+        const player1 = { x: 50, y: 50, width: 30, height: 30, color: 'red' };
+        const player2 = { x: 200, y: 200, width: 30, height: 30, color: 'blue' };
+
+        // Variáveis para verificar se os jogadores estão em movimento
+        let isMoving1 = false, isMoving2 = false;
+
+        // Função para desenhar os jogadores no canvas
+        function drawPlayers() {
+            // Limpa o canvas antes de desenhar novamente
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Desenha o jogador 1
+            ctx.fillStyle = player1.color;
+            ctx.fillRect(player1.x, player1.y, player1.width, player1.height);
+            // Desenha o jogador 2
+            ctx.fillStyle = player2.color;
+            ctx.fillRect(player2.x, player2.y, player2.width, player2.height);
+        }
+
+        // Função para detectar colisão entre os jogadores
+        function detectCollision() {
+            if (player1.x < player2.x + player2.width &&
+                player1.x + player1.width > player2.x &&
+                player1.y < player2.y + player2.height &&
+                player1.y + player1.height > player2.y) {
+                // Exibe um alerta se houver colisão
+                alert("COLISÃO DETECTADA");
+                resetGame(); // Reseta o jogo
+            }
+        }
+
+        // Função para resetar a posição dos jogadores
+        function resetGame() {
+            player1.x = 50; player1.y = 50;
+            player2.x = 200; player2.y = 200;
+        }
+
+        // Funções para mover o jogador 1 baseado na direção
+        function movePlayer1(direction) {
+            if (direction === 'up') player1.y -= 5;
+            if (direction === 'down') player1.y += 5;
+            if (direction === 'left') player1.x -= 5;
+            if (direction === 'right') player1.x += 5;
+            drawPlayers(); // Atualiza a tela
+            detectCollision(); // Verifica colisão
+        }
+
+        // Funções para mover o jogador 2 baseado na direção
+        function movePlayer2(direction) {
+            if (direction === 'up') player2.y -= 5;
+            if (direction === 'down') player2.y += 5;
+            if (direction === 'left') player2.x -= 5;
+            if (direction === 'right') player2.x += 5;
+            drawPlayers(); // Atualiza a tela
+            detectCollision(); // Verifica colisão
+        }
+
+        // Adiciona um evento para escutar pressionamento de teclas
+        document.addEventListener('keydown', (event) => {
+            // Verifica qual tecla foi pressionada e chama a função de mover correspondente
+            if (event.key === 'w') movePlayer1('up');
+            if (event.key === 's') movePlayer1('down');
+            if (event.key === 'a') movePlayer1('left');
+            if (event.key === 'd') movePlayer1('right');
+            if (event.key === 'ArrowUp') movePlayer2('up');
+            if (event.key === 'ArrowDown') movePlayer2('down');
+            if (event.key === 'ArrowLeft') movePlayer2('left');
+            if (event.key === 'ArrowRight') movePlayer2('right');
+        });
+
+        // Chama a função para desenhar os jogadores pela primeira vez
+        drawPlayers();
+    </script>
+</body>
+</html>
